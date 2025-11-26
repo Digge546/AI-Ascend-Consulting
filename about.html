@@ -1,62 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us - AI Ascend Consulting</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+document.addEventListener('DOMContentLoaded', () => {
+    const menuBtn = document.getElementById('menu-btn');
+    const menuOverlay = document.getElementById('menu-overlay');
+    const menuText = document.getElementById('menu-text');
+    const menuIconContainer = document.getElementById('menu-icon-container');
+    const menuLinks = document.querySelectorAll('.menu-link');
+    const navbar = document.getElementById('navbar');
+    
+    let isMenuOpen = false;
 
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="logo">AI Ascend Consulting</div>
-        <button class="menu-toggle" id="mobile-menu">&#9776;</button>
-        <ul class="nav-list">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html" class="active">About</a></li>
-            <li><a href="services.html">Services</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
-    </nav>
+    // Toggle Menu Function
+    function toggleMenu() {
+        isMenuOpen = !isMenuOpen;
+        
+        if (isMenuOpen) {
+            // Open Menu
+            menuOverlay.style.transform = 'translateY(0)';
+            menuText.textContent = 'Close';
+            menuIconContainer.classList.add('bg-white', 'text-black');
+            
+            // Change icon to X (using innerHTML for Lucide logic)
+            menuIconContainer.innerHTML = '<i data-lucide="x" class="w-4 h-4"></i>';
+        } else {
+            // Close Menu
+            menuOverlay.style.transform = 'translateY(-100%)';
+            menuText.textContent = 'Menu';
+            menuIconContainer.classList.remove('bg-white', 'text-black');
+            
+            // Change icon back to Menu
+            menuIconContainer.innerHTML = '<i data-lucide="menu" class="w-4 h-4"></i>';
+        }
+        
+        // Re-initialize icons for the new content
+        lucide.createIcons();
+    }
 
-    <!-- About Us Section -->
-    <section class="about-container">
-    <h2>About AI Ascend Consulting</h2>
-    <p>Helping small businesses harness AI for efficiency, branding, and growth.</p>
+    // Event Listener for Button
+    menuBtn.addEventListener('click', toggleMenu);
 
-    <div class="mission-approach">
-        <div class="mission-card">
-            <h3>🚀 Our Mission</h3>
-            <p>AI Ascend Consulting empowers small businesses by simplifying AI adoption. We help businesses integrate AI tools for automation, efficiency, and brand growth—without the tech overwhelm.</p>
-        </div>
+    // Close menu when a link is clicked
+    menuLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (isMenuOpen) toggleMenu();
+        });
+    });
 
-        <div class="approach-card">
-            <h3>🌟 Our Approach</h3>
-            <p>We focus on <strong>practical AI solutions</strong> that drive real business impact. From content creation to workflow automation, we ensure AI <strong>works for you, not the other way around</strong>.</p>
-        </div>
-    </div>
-</section>
-
-    <!-- Meet the Founder Section -->
-    <section class="meet-founder">
-        <div class="founder-container">
-            <div class="founder-text">
-                <h2>Meet Our Founder</h2>
-                <p>
-                    <strong>Solomon Hassan</strong> is the founder of AI Ascend Consulting, dedicated to helping small businesses streamline operations with AI. 
-                    With a background in employee experience, people analytics, and workplace culture, he blends human-centered strategy with cutting-edge AI solutions.
-                </p>
-                <p>
-                    His expertise spans AI tool integration, workflow automation, and strategic implementation, ensuring businesses operate efficiently and scale effectively.
-                    Beyond consulting, Solomon has led organizational research, employee engagement initiatives, and workplace analytics to drive meaningful change.
-                </p>
-            </div>
-            <div class="founder-image">
-                <img src="images/founder.jpg" alt="Solomon Hassan - Founder of AI Ascend Consulting">
-            </div>
-        </div>
-    </section>
-
-</body>
-</html>
+    // Scroll Effect for Navbar
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.classList.remove('py-8', 'bg-transparent');
+            navbar.classList.add('py-4', 'bg-[#050508]/90', 'backdrop-blur-md', 'border-b', 'border-white/5');
+        } else {
+            navbar.classList.add('py-8', 'bg-transparent');
+            navbar.classList.remove('py-4', 'bg-[#050508]/90', 'backdrop-blur-md', 'border-b', 'border-white/5');
+        }
+    });
+});
