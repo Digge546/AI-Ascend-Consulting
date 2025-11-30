@@ -20,93 +20,117 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Oswald:wght@400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        /* CRITICAL FIX: Smooth Scrolling */
-        html {
-            scroll-behavior: smooth;
+        html { scroll-behavior: smooth; }
+        body { background-color: #050508; }
+
+        /* --- 1. CINEMATIC TEXT REVEAL --- */
+        .reveal-text {
+            display: inline-block;
+            overflow: hidden;
+            vertical-align: bottom;
+        }
+        .reveal-text span {
+            display: inline-block;
+            transform: translateY(100%);
+            opacity: 0;
+            animation: textRise 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes textRise {
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        /* Sharp, High-Tech Gradients */
-        .tech-glow {
-            background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 60%);
+        /* --- 2. FLASHLIGHT / SPOTLIGHT EFFECT --- */
+        .spotlight-card {
+            background-color: rgba(255, 255, 255, 0.02);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .metallic-text {
-            background: linear-gradient(to bottom, #ffffff, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        /* The glow effect follows mouse via JS variables --x and --y */
+        .spotlight-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(800px circle at var(--x) var(--y), rgba(99, 102, 241, 0.15), transparent 40%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+            z-index: 0;
         }
+        .spotlight-card:hover::before { opacity: 1; }
+        
+        /* Inner Border Glow */
+        .spotlight-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(600px circle at var(--x) var(--y), rgba(255, 255, 255, 0.1), transparent 40%);
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.5s;
+        }
+        .spotlight-card:hover::after { opacity: 1; }
+
+        /* --- 3. BORDER BEAM BUTTON --- */
+        .btn-beam {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-beam::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.7s ease;
+        }
+        .btn-beam:hover::before {
+            left: 100%;
+        }
+
+        /* --- 4. GRID BACKGROUND --- */
         .grid-tech {
             background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
             linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
             background-size: 50px 50px;
-            animation: gridMove 20s linear infinite;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
         }
-
-        @keyframes gridMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 50px 50px; }
-        }
-
-        /* Fade Up Animation Class */
-        .reveal-on-scroll {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
-        }
-        .reveal-on-scroll.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Staggered Delays */
-        .delay-100 { transition-delay: 0.1s; }
-        .delay-200 { transition-delay: 0.2s; }
-        .delay-300 { transition-delay: 0.3s; }
     </style>
 </head>
 <body class="relative selection:bg-indigo-600 selection:text-white bg-[#050508] font-inter">
 
-    <!-- BACKGROUND: Clean Tech Grid with Subtle Animation -->
-    <div class="fixed inset-0 grid-tech pointer-events-none z-0 opacity-50"></div>
+    <!-- BACKGROUND -->
+    <div class="fixed inset-0 grid-tech pointer-events-none z-0"></div>
     <div class="fixed top-0 left-0 w-full h-full bg-gradient-to-b from-[#050508] via-transparent to-[#050508] pointer-events-none z-0"></div>
 
     <!-- NAVIGATION -->
     <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300 py-6 bg-[#050508]/80 backdrop-blur-md border-b border-white/5">
         <div class="container mx-auto px-6 flex justify-between items-center">
-            
-            <!-- LOGO AREA -->
             <a href="#" class="block hover:opacity-80 transition-opacity">
-                <!-- Primary Logo Image -->
                 <img src="logo.jpg" 
                      alt="AI Ascend Logo" 
                      class="h-16 w-auto object-contain rounded-md"
                      onload="this.style.display='block'; this.nextElementSibling.style.display='none';"
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                
-                <!-- Fallback Text -->
                 <span class="hidden text-xl font-syne font-bold tracking-[0.2em] text-white">AI ASCEND</span>
             </a>
             
             <div class="flex items-center gap-8">
-                <!-- Desktop Links -->
                 <div class="hidden lg:flex items-center gap-8">
                     <a href="#mission" class="text-xs font-mono uppercase tracking-widest text-neutral-400 hover:text-white transition-colors">Mission</a>
                     <a href="#services" class="text-xs font-mono uppercase tracking-widest text-neutral-400 hover:text-white transition-colors">Protocols</a>
                     <a href="#founder" class="text-xs font-mono uppercase tracking-widest text-neutral-400 hover:text-white transition-colors">Founder</a>
-                    <a href="#footer" class="text-xs font-mono uppercase tracking-widest text-neutral-400 hover:text-white transition-colors">Contact</a>
                 </div>
-
-                <!-- CTA Button -->
-                <a href="https://calendly.com/solomon-aiascendconsulting" target="_blank" class="px-6 py-2 border border-white/20 text-xs font-mono uppercase tracking-widest text-white hover:bg-white hover:text-black transition-all">
+                <a href="https://calendly.com/solomon-aiascendconsulting" target="_blank" class="btn-beam px-6 py-2 border border-white/20 text-xs font-mono uppercase tracking-widest text-white hover:bg-white hover:text-black transition-all">
                     Book Call
                 </a>
             </div>
         </div>
     </nav>
 
-    <!-- HERO SECTION -->
+    <!-- HERO SECTION: Cinematic Text Reveal -->
     <section id="hero" class="relative min-h-screen flex items-center justify-center px-4 pt-20">
         <div class="relative z-10 text-center w-full max-w-6xl mx-auto flex flex-col items-center">
-            <div class="flex items-center gap-4 mb-10 reveal-on-scroll">
+            <div class="flex items-center gap-4 mb-10 opacity-0 animate-[fadeIn_1s_ease_forwards_0.5s]">
                 <span class="h-[1px] w-12 bg-indigo-500"></span>
                 <p class="font-mono text-xs tracking-[0.4em] text-indigo-400 uppercase font-semibold">
                     Strategic AI Architecture
@@ -114,18 +138,19 @@
                 <span class="h-[1px] w-12 bg-indigo-500"></span>
             </div>
             
-            <h1 class="font-oswald text-[10vw] leading-[0.9] font-bold uppercase tracking-tighter mb-8 reveal-on-scroll delay-100 text-white">
-                Scale Without <br/>
-                <span class="metallic-text">Friction.</span>
+            <h1 class="font-oswald text-[10vw] leading-[0.9] font-bold uppercase tracking-tighter mb-8 text-white">
+                <div class="reveal-text"><span style="animation-delay: 0.1s;">Scale</span></div>
+                <div class="reveal-text"><span style="animation-delay: 0.2s;">Without</span></div>
+                <div class="reveal-text"><span style="animation-delay: 0.3s; color: #818cf8;">Friction.</span></div>
             </h1>
 
-            <div class="max-w-3xl mx-auto mt-4 reveal-on-scroll delay-200">
+            <div class="max-w-3xl mx-auto mt-4 opacity-0 animate-[fadeIn_1s_ease_forwards_0.8s]">
                 <p class="text-neutral-400 font-light leading-relaxed mb-12 text-lg md:text-xl">
-                    We strip away the noise and build the systems. Whether you need a <span class="text-white border-b border-indigo-500">comprehensive audit</span>, a <span class="text-white border-b border-indigo-500">custom AI workforce</span>, or <span class="text-white border-b border-indigo-500">executive training</span>, we architect the fastest path to your evolution.
+                    We strip away the noise. Whether you need a <span class="text-white border-b border-indigo-500">comprehensive audit</span>, a <span class="text-white border-b border-indigo-500">custom AI workforce</span>, or <span class="text-white border-b border-indigo-500">executive training</span>, we architect the fastest path to your evolution.
                 </p>
                 
                 <div class="flex flex-col md:flex-row gap-6 justify-center items-center w-full">
-                    <a href="https://calendly.com/solomon-aiascendconsulting" target="_blank" class="w-full md:w-auto px-12 py-4 bg-white text-black font-oswald font-bold tracking-widest uppercase hover:bg-indigo-600 hover:text-white transition-all duration-300 text-center">
+                    <a href="https://calendly.com/solomon-aiascendconsulting" target="_blank" class="btn-beam w-full md:w-auto px-12 py-4 bg-white text-black font-oswald font-bold tracking-widest uppercase hover:bg-indigo-600 hover:text-white transition-all duration-300 text-center">
                         Execute Audit
                     </a>
                     <a href="#services" class="w-full md:w-auto px-12 py-4 border border-white/20 text-white font-oswald font-bold tracking-widest uppercase hover:border-white transition-all duration-300 text-center">
@@ -136,124 +161,141 @@
         </div>
     </section>
 
-    <!-- VALUE METRICS (With Counters) -->
-    <section id="mission" class="py-24 border-y border-white/10 bg-[#08080c] relative scroll-mt-20">
+    <!-- VALUE METRICS: High Contrast Visuals -->
+    <section id="mission" class="py-24 border-y border-white/10 bg-[#08080c] relative">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-white/10">
-                
-                <div class="py-8 md:py-0 px-4 reveal-on-scroll">
-                    <h3 class="text-5xl font-oswald font-bold text-white mb-2 counter" data-target="40">0%</h3>
+                <div class="py-8 md:py-0 px-4 group">
+                    <h3 class="text-6xl font-oswald font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-600 mb-2 group-hover:to-indigo-400 transition-all">40%</h3>
                     <p class="text-xs font-mono text-indigo-400 uppercase tracking-widest mb-2">Efficiency Gain</p>
-                    <p class="text-neutral-500 text-sm">Average increase in output speed.</p>
                 </div>
-
-                <div class="py-8 md:py-0 px-4 reveal-on-scroll delay-100">
-                    <h3 class="text-5xl font-oswald font-bold text-white mb-2">10x</h3>
+                <div class="py-8 md:py-0 px-4 group">
+                    <h3 class="text-6xl font-oswald font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-600 mb-2 group-hover:to-indigo-400 transition-all">10x</h3>
                     <p class="text-xs font-mono text-indigo-400 uppercase tracking-widest mb-2">Scalability</p>
-                    <p class="text-neutral-500 text-sm">Deploy agents that work 24/7.</p>
                 </div>
-
-                <div class="py-8 md:py-0 px-4 reveal-on-scroll delay-200">
-                    <h3 class="text-5xl font-oswald font-bold text-white mb-2">Zero</h3>
+                <div class="py-8 md:py-0 px-4 group">
+                    <h3 class="text-6xl font-oswald font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-600 mb-2 group-hover:to-indigo-400 transition-all">Zero</h3>
                     <p class="text-xs font-mono text-indigo-400 uppercase tracking-widest mb-2">Tech Overwhelm</p>
-                    <p class="text-neutral-500 text-sm">We handle the complexity.</p>
                 </div>
-
             </div>
         </div>
     </section>
 
-    <!-- SERVICES: Staggered Entrance -->
-    <section id="services" class="py-32 relative scroll-mt-20">
+    <!-- SERVICES: The "Spotlight" Stack (Flashlight Effect) -->
+    <section id="services" class="py-32 relative" onmousemove="handleMouseMove(event)">
         <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-24 reveal-on-scroll">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-24">
                 <div>
                     <h2 class="text-6xl font-oswald font-bold uppercase text-white mb-6">The Stack</h2>
-                    <p class="text-neutral-400 max-w-md">Modular solutions designed for speed. Choose your entry point.</p>
+                    <p class="text-neutral-400 max-w-md">Modular solutions designed for speed.</p>
                 </div>
                 <div class="hidden md:block h-[1px] flex-grow bg-white/10 ml-12 mb-4"></div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-container">
                 <!-- Card 1 -->
-                <div class="group relative p-10 bg-[#0a0a0e] border border-white/5 hover:border-indigo-500/50 transition-all duration-300 hover:z-10 reveal-on-scroll">
-                    <div class="flex justify-between items-start mb-8">
-                        <i data-lucide="scan-search" class="w-8 h-8 text-neutral-600 group-hover:text-indigo-500 transition-colors"></i>
-                        <span class="font-mono text-xs text-neutral-600">01</span>
+                <div class="spotlight-card group p-10 rounded-lg">
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-start mb-8">
+                            <div class="p-3 bg-white/5 rounded-lg text-white group-hover:text-indigo-400 transition-colors">
+                                <i data-lucide="scan-search" class="w-6 h-6"></i>
+                            </div>
+                            <span class="font-mono text-xs text-neutral-600">01</span>
+                        </div>
+                        <h3 class="text-2xl font-oswald text-white uppercase mb-4">Discovery & Audit</h3>
+                        <p class="text-neutral-400 text-sm leading-relaxed mb-8 h-20">We map your entire workflow ecosystem to find bottlenecks and leaks.</p>
+                        <a href="https://calendly.com/solomon-aiascendconsulting" target="_blank" class="inline-flex items-center gap-2 text-xs font-mono uppercase text-white hover:text-indigo-400 transition-colors">Start Audit <i data-lucide="arrow-right" class="w-3 h-3"></i></a>
                     </div>
-                    <h3 class="text-2xl font-oswald text-white uppercase mb-4">Discovery & Audit</h3>
-                    <p class="text-neutral-400 text-sm leading-relaxed mb-8 h-20">We map your entire workflow ecosystem to find bottlenecks.</p>
-                    <a href="https://calendly.com/solomon-aiascendconsulting" target="_blank" class="inline-flex items-center gap-2 text-xs font-mono uppercase text-white hover:text-indigo-400 transition-colors">Start Audit <i data-lucide="arrow-right" class="w-3 h-3"></i></a>
                 </div>
 
                 <!-- Card 2 -->
-                <div class="group relative p-10 bg-[#0a0a0e] border border-white/5 hover:border-indigo-500/50 transition-all duration-300 hover:z-10 reveal-on-scroll delay-100">
-                    <div class="flex justify-between items-start mb-8">
-                        <i data-lucide="bot" class="w-8 h-8 text-neutral-600 group-hover:text-indigo-500 transition-colors"></i>
-                        <span class="font-mono text-xs text-neutral-600">02</span>
+                <div class="spotlight-card group p-10 rounded-lg">
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-start mb-8">
+                            <div class="p-3 bg-white/5 rounded-lg text-white group-hover:text-indigo-400 transition-colors">
+                                <i data-lucide="bot" class="w-6 h-6"></i>
+                            </div>
+                            <span class="font-mono text-xs text-neutral-600">02</span>
+                        </div>
+                        <h3 class="text-2xl font-oswald text-white uppercase mb-4">Custom Agent Build</h3>
+                        <p class="text-neutral-400 text-sm leading-relaxed mb-8 h-20">We build custom GPTs trained on YOUR data and business logic.</p>
+                        <a href="https://calendly.com/solomon-aiascendconsulting" target="_blank" class="inline-flex items-center gap-2 text-xs font-mono uppercase text-white hover:text-indigo-400 transition-colors">Build Agent <i data-lucide="arrow-right" class="w-3 h-3"></i></a>
                     </div>
-                    <h3 class="text-2xl font-oswald text-white uppercase mb-4">Custom Agent Build</h3>
-                    <p class="text-neutral-400 text-sm leading-relaxed mb-8 h-20">We build custom GPTs trained on YOUR data and business logic.</p>
-                    <a href="https://calendly.com/solomon-aiascendconsulting" target="_blank" class="inline-flex items-center gap-2 text-xs font-mono uppercase text-white hover:text-indigo-400 transition-colors">Build Agent <i data-lucide="arrow-right" class="w-3 h-3"></i></a>
                 </div>
 
                 <!-- Card 3 -->
-                <div class="group relative p-10 bg-[#0a0a0e] border border-white/5 hover:border-indigo-500/50 transition-all duration-300 hover:z-10 reveal-on-scroll delay-200">
-                    <div class="flex justify-between items-start mb-8">
-                        <i data-lucide="terminal" class="w-8 h-8 text-neutral-600 group-hover:text-indigo-500 transition-colors"></i>
-                        <span class="font-mono text-xs text-neutral-600">03</span>
+                <div class="spotlight-card group p-10 rounded-lg">
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-start mb-8">
+                            <div class="p-3 bg-white/5 rounded-lg text-white group-hover:text-indigo-400 transition-colors">
+                                <i data-lucide="terminal" class="w-6 h-6"></i>
+                            </div>
+                            <span class="font-mono text-xs text-neutral-600">03</span>
+                        </div>
+                        <h3 class="text-2xl font-oswald text-white uppercase mb-4">Prompt Engineering</h3>
+                        <p class="text-neutral-400 text-sm leading-relaxed mb-8 h-20">We teach your team the exact syntax to get expert-level outputs.</p>
+                        <a href="https://calendly.com/solomon-aiascendconsulting" target="_blank" class="inline-flex items-center gap-2 text-xs font-mono uppercase text-white hover:text-indigo-400 transition-colors">Learn Syntax <i data-lucide="arrow-right" class="w-3 h-3"></i></a>
                     </div>
-                    <h3 class="text-2xl font-oswald text-white uppercase mb-4">Prompt Engineering</h3>
-                    <p class="text-neutral-400 text-sm leading-relaxed mb-8 h-20">We teach your team the exact syntax to get expert-level outputs.</p>
-                    <a href="https://calendly.com/solomon-aiascendconsulting" target="_blank" class="inline-flex items-center gap-2 text-xs font-mono uppercase text-white hover:text-indigo-400 transition-colors">Learn Syntax <i data-lucide="arrow-right" class="w-3 h-3"></i></a>
                 </div>
 
                 <!-- Card 4 -->
-                <div class="group relative p-10 bg-[#0a0a0e] border border-white/5 hover:border-indigo-500/50 transition-all duration-300 hover:z-10 reveal-on-scroll">
-                    <div class="flex justify-between items-start mb-8">
-                        <i data-lucide="layers" class="w-8 h-8 text-neutral-600 group-hover:text-indigo-500 transition-colors"></i>
-                        <span class="font-mono text-xs text-neutral-600">04</span>
+                <div class="spotlight-card group p-10 rounded-lg">
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-start mb-8">
+                            <div class="p-3 bg-white/5 rounded-lg text-white group-hover:text-indigo-400 transition-colors">
+                                <i data-lucide="layers" class="w-6 h-6"></i>
+                            </div>
+                            <span class="font-mono text-xs text-neutral-600">04</span>
+                        </div>
+                        <h3 class="text-2xl font-oswald text-white uppercase mb-4">Stack Strategy</h3>
+                        <p class="text-neutral-400 text-sm leading-relaxed mb-8 h-20">We consolidate your tools into a lean, high-performance ecosystem.</p>
+                        <a href="https://calendly.com/solomon-aiascendconsulting" target="_blank" class="inline-flex items-center gap-2 text-xs font-mono uppercase text-white hover:text-indigo-400 transition-colors">Optimize Stack <i data-lucide="arrow-right" class="w-3 h-3"></i></a>
                     </div>
-                    <h3 class="text-2xl font-oswald text-white uppercase mb-4">Stack Strategy</h3>
-                    <p class="text-neutral-400 text-sm leading-relaxed mb-8 h-20">We consolidate your tools into a lean, high-performance ecosystem.</p>
-                    <a href="https://calendly.com/solomon-aiascendconsulting" target="_blank" class="inline-flex items-center gap-2 text-xs font-mono uppercase text-white hover:text-indigo-400 transition-colors">Optimize Stack <i data-lucide="arrow-right" class="w-3 h-3"></i></a>
                 </div>
 
                 <!-- Card 5 -->
-                <div class="group relative p-10 bg-[#0a0a0e] border border-white/5 hover:border-indigo-500/50 transition-all duration-300 hover:z-10 reveal-on-scroll delay-100">
-                    <div class="flex justify-between items-start mb-8">
-                        <i data-lucide="pen-tool" class="w-8 h-8 text-neutral-600 group-hover:text-indigo-500 transition-colors"></i>
-                        <span class="font-mono text-xs text-neutral-600">05</span>
+                <div class="spotlight-card group p-10 rounded-lg">
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-start mb-8">
+                            <div class="p-3 bg-white/5 rounded-lg text-white group-hover:text-indigo-400 transition-colors">
+                                <i data-lucide="pen-tool" class="w-6 h-6"></i>
+                            </div>
+                            <span class="font-mono text-xs text-neutral-600">05</span>
+                        </div>
+                        <h3 class="text-2xl font-oswald text-white uppercase mb-4">Automated Content</h3>
+                        <p class="text-neutral-400 text-sm leading-relaxed mb-8 h-20">Set up automated pipelines for high-quality marketing content.</p>
+                        <a href="https://calendly.com/solomon-aiascendconsulting" target="_blank" class="inline-flex items-center gap-2 text-xs font-mono uppercase text-white hover:text-indigo-400 transition-colors">Automate Now <i data-lucide="arrow-right" class="w-3 h-3"></i></a>
                     </div>
-                    <h3 class="text-2xl font-oswald text-white uppercase mb-4">Automated Content</h3>
-                    <p class="text-neutral-400 text-sm leading-relaxed mb-8 h-20">Set up automated pipelines for high-quality marketing content.</p>
-                    <a href="https://calendly.com/solomon-aiascendconsulting" target="_blank" class="inline-flex items-center gap-2 text-xs font-mono uppercase text-white hover:text-indigo-400 transition-colors">Automate Now <i data-lucide="arrow-right" class="w-3 h-3"></i></a>
                 </div>
 
                 <!-- Card 6 -->
-                <div class="group relative p-10 bg-[#0a0a0e] border border-white/5 hover:border-indigo-500/50 transition-all duration-300 hover:z-10 reveal-on-scroll delay-200">
-                    <div class="flex justify-between items-start mb-8">
-                        <i data-lucide="presentation" class="w-8 h-8 text-neutral-600 group-hover:text-indigo-500 transition-colors"></i>
-                        <span class="font-mono text-xs text-neutral-600">06</span>
+                <div class="spotlight-card group p-10 rounded-lg">
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-start mb-8">
+                            <div class="p-3 bg-white/5 rounded-lg text-white group-hover:text-indigo-400 transition-colors">
+                                <i data-lucide="presentation" class="w-6 h-6"></i>
+                            </div>
+                            <span class="font-mono text-xs text-neutral-600">06</span>
+                        </div>
+                        <h3 class="text-2xl font-oswald text-white uppercase mb-4">Corporate Training</h3>
+                        <p class="text-neutral-400 text-sm leading-relaxed mb-8 h-20">Hands-on workshops to upskill your workforce into AI power users.</p>
+                        <a href="https://calendly.com/solomon-aiascendconsulting" target="_blank" class="inline-flex items-center gap-2 text-xs font-mono uppercase text-white hover:text-indigo-400 transition-colors">Train Team <i data-lucide="arrow-right" class="w-3 h-3"></i></a>
                     </div>
-                    <h3 class="text-2xl font-oswald text-white uppercase mb-4">Corporate Training</h3>
-                    <p class="text-neutral-400 text-sm leading-relaxed mb-8 h-20">Hands-on workshops to upskill your workforce into AI power users.</p>
-                    <a href="https://calendly.com/solomon-aiascendconsulting" target="_blank" class="inline-flex items-center gap-2 text-xs font-mono uppercase text-white hover:text-indigo-400 transition-colors">Train Team <i data-lucide="arrow-right" class="w-3 h-3"></i></a>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- FOUNDER SECTION -->
-    <section id="founder" class="py-40 container mx-auto px-6 relative scroll-mt-20">
+    <section id="founder" class="py-40 container mx-auto px-6 relative">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-            <div class="relative order-2 lg:order-1 group reveal-on-scroll">
+            <div class="relative order-2 lg:order-1 group">
                 <div class="absolute -inset-4 border border-white/10 z-0"></div>
                 <div class="aspect-[4/5] bg-[#0a0a0a] relative overflow-hidden z-10 filter grayscale contrast-125 group-hover:grayscale-0 transition-all duration-700">
                     <img src="1742852933309.jpeg" onerror="this.src='founder.jpg'" alt="Solomon Hassan" class="object-cover w-full h-full">
                 </div>
             </div>
-            <div class="order-1 lg:order-2 reveal-on-scroll delay-100">
+            <div class="order-1 lg:order-2">
                 <h2 class="text-xs font-mono text-indigo-400 mb-6 tracking-[0.2em] uppercase flex items-center gap-3">
                     <span class="w-8 h-[1px] bg-indigo-400"></span>
                     The Architect
@@ -263,12 +305,11 @@
                     <span class="metallic-text">INTELLIGENCE.</span>
                 </h3>
                 <div class="space-y-6 text-neutral-400 font-inter font-light text-lg leading-relaxed pl-8 border-l border-white/10">
-                    <p>I don't believe in theory. I believe in systems that work. As a strategist, my role is to identify the fastest route to your outcome and build the infrastructure to get you there.</p>
+                    <p>I don't believe in theory. I believe in systems that work. As a strategist, my role is to identify the fastest route to your outcome.</p>
                     <p>With a background in global consulting and organizational analytics, I blend high-level strategy with deep technical execution.</p>
-                    <p>We don't just add AI to your business; we rebuild your business to thrive in an AI-first world.</p>
                 </div>
                 <div class="pt-10 pl-8">
-                    <a href="https://calendly.com/solomon-aiascendconsulting" target="_blank" class="inline-flex items-center gap-4 text-white hover:text-indigo-400 transition-colors group">
+                    <a href="https://calendly.com/solomon-aiascendconsulting" target="_blank" class="btn-beam inline-flex items-center gap-4 text-white hover:text-indigo-400 transition-colors group">
                         <span class="font-oswald uppercase tracking-widest text-lg border-b border-white/30 pb-1 group-hover:border-indigo-400">Work With Solomon</span>
                         <i data-lucide="arrow-right" class="group-hover:translate-x-2 transition-transform w-5 h-5"></i>
                     </a>
@@ -278,11 +319,11 @@
     </section>
 
     <!-- FOOTER -->
-    <footer id="footer" class="bg-[#050508] pt-32 pb-12 px-6 border-t border-white/10 scroll-mt-20">
-        <div class="container mx-auto flex flex-col items-center text-center reveal-on-scroll">
+    <footer id="footer" class="bg-[#050508] pt-32 pb-12 px-6 border-t border-white/10">
+        <div class="container mx-auto flex flex-col items-center text-center">
             <h2 class="font-oswald text-4xl text-white mb-8">READY TO ASCEND?</h2>
             <div class="flex flex-col md:flex-row gap-6 mb-20">
-                <a href="https://calendly.com/solomon-aiascendconsulting" target="_blank" class="px-10 py-4 bg-white text-black font-oswald uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all">
+                <a href="https://calendly.com/solomon-aiascendconsulting" target="_blank" class="btn-beam px-10 py-4 bg-white text-black font-oswald uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all">
                     Book Discovery Call
                 </a>
             </div>
@@ -297,50 +338,27 @@
         </div>
     </footer>
 
-    <!-- Main Script with Animation Logic -->
+    <!-- Main Script for Flashlight Effect -->
     <script>
         lucide.createIcons();
 
-        // Reveal Animation Observer
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1
-        };
+        // Keyframes for fade in
+        const styleSheet = document.createElement("style");
+        styleSheet.innerText = `
+            @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        `;
+        document.head.appendChild(styleSheet);
 
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                    
-                    // Trigger Counter Animation if found
-                    const counter = entry.target.querySelector('.counter');
-                    if (counter) {
-                        animateValue(counter, 0, parseInt(counter.dataset.target), 2000);
-                        counter.classList.remove('counter'); // Run once
-                    }
-                    
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.reveal-on-scroll').forEach((element) => {
-            observer.observe(element);
-        });
-
-        // Number Counter Logic
-        function animateValue(obj, start, end, duration) {
-            let startTimestamp = null;
-            const step = (timestamp) => {
-                if (!startTimestamp) startTimestamp = timestamp;
-                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                obj.innerHTML = Math.floor(progress * (end - start) + start) + "%";
-                if (progress < 1) {
-                    window.requestAnimationFrame(step);
-                }
-            };
-            window.requestAnimationFrame(step);
+        // Flashlight Logic
+        function handleMouseMove(e) {
+            const cards = document.getElementsByClassName("spotlight-card");
+            for(const card of cards) {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty("--x", `${x}px`);
+                card.style.setProperty("--y", `${y}px`);
+            }
         }
     </script>
 </body>
