@@ -51,9 +51,10 @@
     <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300 py-6 bg-[#050508]/80 backdrop-blur-md border-b border-white/5">
         <div class="container mx-auto px-6 flex justify-between items-center">
             
-            <!-- LOGO UPDATE: Fixed filename space with %20 -->
+            <!-- LOGO UPDATE: Tries 'logo-aia.jpg' first, falls back to 'logo aia.jpg' -->
             <a href="#" class="block hover:opacity-80 transition-opacity">
                 <img src="logo-aia.jpg" 
+                     onerror="this.src='logo aia.jpg'"
                      alt="AI Ascend Logo" 
                      class="h-16 w-auto object-contain rounded-md"> 
             </a>
