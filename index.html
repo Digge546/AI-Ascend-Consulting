@@ -94,6 +94,19 @@
             background-size: 50px 50px;
             mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
         }
+
+        /* Scroll Reveal Animation Classes */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .delay-100 { transition-delay: 0.1s; }
+        .delay-200 { transition-delay: 0.2s; }
     </style>
 </head>
 <body class="relative selection:bg-indigo-600 selection:text-white bg-[#050508] font-inter">
@@ -105,21 +118,30 @@
     <!-- NAVIGATION -->
     <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300 py-6 bg-[#050508]/80 backdrop-blur-md border-b border-white/5">
         <div class="container mx-auto px-6 flex justify-between items-center">
+            
+            <!-- LOGO AREA -->
             <a href="#" class="block hover:opacity-80 transition-opacity">
-                <img src="logo.jpg" 
+                <!-- Primary Logo Image -->
+                <img src="logo-aia.jpg" 
                      alt="AI Ascend Logo" 
                      class="h-16 w-auto object-contain rounded-md"
                      onload="this.style.display='block'; this.nextElementSibling.style.display='none';"
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                
+                <!-- Fallback Text -->
                 <span class="hidden text-xl font-syne font-bold tracking-[0.2em] text-white">AI ASCEND</span>
             </a>
             
             <div class="flex items-center gap-8">
+                <!-- Desktop Links -->
                 <div class="hidden lg:flex items-center gap-8">
                     <a href="#mission" class="text-xs font-mono uppercase tracking-widest text-neutral-400 hover:text-white transition-colors">Mission</a>
                     <a href="#services" class="text-xs font-mono uppercase tracking-widest text-neutral-400 hover:text-white transition-colors">Protocols</a>
                     <a href="#founder" class="text-xs font-mono uppercase tracking-widest text-neutral-400 hover:text-white transition-colors">Founder</a>
+                    <a href="#footer" class="text-xs font-mono uppercase tracking-widest text-neutral-400 hover:text-white transition-colors">Contact</a>
                 </div>
+
+                <!-- CTA Button -->
                 <a href="https://calendly.com/solomon-aiascendconsulting" target="_blank" class="btn-beam px-6 py-2 border border-white/20 text-xs font-mono uppercase tracking-widest text-white hover:bg-white hover:text-black transition-all">
                     Book Call
                 </a>
@@ -165,15 +187,15 @@
     <section id="mission" class="py-24 border-y border-white/10 bg-[#08080c] relative">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-white/10">
-                <div class="py-8 md:py-0 px-4 group">
+                <div class="py-8 md:py-0 px-4 group reveal-on-scroll">
                     <h3 class="text-6xl font-oswald font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-600 mb-2 group-hover:to-indigo-400 transition-all">40%</h3>
                     <p class="text-xs font-mono text-indigo-400 uppercase tracking-widest mb-2">Efficiency Gain</p>
                 </div>
-                <div class="py-8 md:py-0 px-4 group">
+                <div class="py-8 md:py-0 px-4 group reveal-on-scroll delay-100">
                     <h3 class="text-6xl font-oswald font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-600 mb-2 group-hover:to-indigo-400 transition-all">10x</h3>
                     <p class="text-xs font-mono text-indigo-400 uppercase tracking-widest mb-2">Scalability</p>
                 </div>
-                <div class="py-8 md:py-0 px-4 group">
+                <div class="py-8 md:py-0 px-4 group reveal-on-scroll delay-200">
                     <h3 class="text-6xl font-oswald font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-600 mb-2 group-hover:to-indigo-400 transition-all">Zero</h3>
                     <p class="text-xs font-mono text-indigo-400 uppercase tracking-widest mb-2">Tech Overwhelm</p>
                 </div>
@@ -184,7 +206,7 @@
     <!-- SERVICES: The "Spotlight" Stack (Flashlight Effect) -->
     <section id="services" class="py-32 relative" onmousemove="handleMouseMove(event)">
         <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-24">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-24 reveal-on-scroll">
                 <div>
                     <h2 class="text-6xl font-oswald font-bold uppercase text-white mb-6">The Stack</h2>
                     <p class="text-neutral-400 max-w-md">Modular solutions designed for speed.</p>
@@ -194,7 +216,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="cards-container">
                 <!-- Card 1 -->
-                <div class="spotlight-card group p-10 rounded-lg">
+                <div class="spotlight-card group p-10 rounded-lg reveal-on-scroll">
                     <div class="relative z-10">
                         <div class="flex justify-between items-start mb-8">
                             <div class="p-3 bg-white/5 rounded-lg text-white group-hover:text-indigo-400 transition-colors">
@@ -209,7 +231,7 @@
                 </div>
 
                 <!-- Card 2 -->
-                <div class="spotlight-card group p-10 rounded-lg">
+                <div class="spotlight-card group p-10 rounded-lg reveal-on-scroll delay-100">
                     <div class="relative z-10">
                         <div class="flex justify-between items-start mb-8">
                             <div class="p-3 bg-white/5 rounded-lg text-white group-hover:text-indigo-400 transition-colors">
@@ -224,7 +246,7 @@
                 </div>
 
                 <!-- Card 3 -->
-                <div class="spotlight-card group p-10 rounded-lg">
+                <div class="spotlight-card group p-10 rounded-lg reveal-on-scroll delay-200">
                     <div class="relative z-10">
                         <div class="flex justify-between items-start mb-8">
                             <div class="p-3 bg-white/5 rounded-lg text-white group-hover:text-indigo-400 transition-colors">
@@ -239,7 +261,7 @@
                 </div>
 
                 <!-- Card 4 -->
-                <div class="spotlight-card group p-10 rounded-lg">
+                <div class="spotlight-card group p-10 rounded-lg reveal-on-scroll">
                     <div class="relative z-10">
                         <div class="flex justify-between items-start mb-8">
                             <div class="p-3 bg-white/5 rounded-lg text-white group-hover:text-indigo-400 transition-colors">
@@ -254,7 +276,7 @@
                 </div>
 
                 <!-- Card 5 -->
-                <div class="spotlight-card group p-10 rounded-lg">
+                <div class="spotlight-card group p-10 rounded-lg reveal-on-scroll delay-100">
                     <div class="relative z-10">
                         <div class="flex justify-between items-start mb-8">
                             <div class="p-3 bg-white/5 rounded-lg text-white group-hover:text-indigo-400 transition-colors">
@@ -269,7 +291,7 @@
                 </div>
 
                 <!-- Card 6 -->
-                <div class="spotlight-card group p-10 rounded-lg">
+                <div class="spotlight-card group p-10 rounded-lg reveal-on-scroll delay-200">
                     <div class="relative z-10">
                         <div class="flex justify-between items-start mb-8">
                             <div class="p-3 bg-white/5 rounded-lg text-white group-hover:text-indigo-400 transition-colors">
@@ -289,13 +311,13 @@
     <!-- FOUNDER SECTION -->
     <section id="founder" class="py-40 container mx-auto px-6 relative">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-            <div class="relative order-2 lg:order-1 group">
+            <div class="relative order-2 lg:order-1 group reveal-on-scroll">
                 <div class="absolute -inset-4 border border-white/10 z-0"></div>
                 <div class="aspect-[4/5] bg-[#0a0a0a] relative overflow-hidden z-10 filter grayscale contrast-125 group-hover:grayscale-0 transition-all duration-700">
                     <img src="1742852933309.jpeg" onerror="this.src='founder.jpg'" alt="Solomon Hassan" class="object-cover w-full h-full">
                 </div>
             </div>
-            <div class="order-1 lg:order-2">
+            <div class="order-1 lg:order-2 reveal-on-scroll delay-100">
                 <h2 class="text-xs font-mono text-indigo-400 mb-6 tracking-[0.2em] uppercase flex items-center gap-3">
                     <span class="w-8 h-[1px] bg-indigo-400"></span>
                     The Architect
@@ -320,7 +342,7 @@
 
     <!-- FOOTER -->
     <footer id="footer" class="bg-[#050508] pt-32 pb-12 px-6 border-t border-white/10">
-        <div class="container mx-auto flex flex-col items-center text-center">
+        <div class="container mx-auto flex flex-col items-center text-center reveal-on-scroll">
             <h2 class="font-oswald text-4xl text-white mb-8">READY TO ASCEND?</h2>
             <div class="flex flex-col md:flex-row gap-6 mb-20">
                 <a href="https://calendly.com/solomon-aiascendconsulting" target="_blank" class="btn-beam px-10 py-4 bg-white text-black font-oswald uppercase tracking-widest hover:bg-indigo-600 hover:text-white transition-all">
@@ -338,7 +360,7 @@
         </div>
     </footer>
 
-    <!-- Main Script for Flashlight Effect -->
+    <!-- Main Script for Flashlight Effect & Scroll Animations -->
     <script>
         lucide.createIcons();
 
@@ -360,6 +382,26 @@
                 card.style.setProperty("--y", `${y}px`);
             }
         }
+
+        // Scroll Reveal Observer
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal-on-scroll').forEach((element) => {
+            observer.observe(element);
+        });
     </script>
 </body>
 </html>
